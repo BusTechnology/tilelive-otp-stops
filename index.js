@@ -127,6 +127,8 @@ class GeoJSONSource {
   constructor(uri, callback){
     uri.protocol = "http:"
     getTileIndex(uri, stopQuery, stopMapper, (err, stopTileIndex) => {
+      console.log("COLOR IS ");
+      console.log(stops.pattern.route.color);
       if (err){
         callback(err);
         return;
