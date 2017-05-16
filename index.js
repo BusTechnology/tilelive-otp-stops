@@ -55,6 +55,7 @@ const stopQuery = `
         headsign
         route {
           mode
+          color
           shortName
         }
       }
@@ -75,6 +76,7 @@ const stationQuery = `
         patterns {
           route {
             mode
+            color
             shortName
           }
         }
@@ -96,6 +98,7 @@ const stopMapper = data => ({
       parentStation: stop.parentStation == null ? null : stop.parentStation.gtfsId,
       type: stop.patterns == null ? null : stop.patterns.map(pattern => pattern.route.mode).uniq().join(","),
       patterns: stop.patterns == null ? null : JSON.stringify(stop.patterns.map(pattern => ({
+        color: pattern.color,
         headsign: pattern.headsign,
         type: pattern.route.mode,
         shortName: pattern.route.shortName,
