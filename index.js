@@ -38,52 +38,52 @@ const getTileIndex = (url, query, map, callback) => {
   })
 }
 
-const stopQuery = `
-  query stops {
-    stops{
-      gtfsId
-      name
-      code
-      platformCode
-      lat
-      lon
-      locationType
-      parentStation {
-        gtfsId
-      }
-      patterns {
-        headsign
-        route {
-          mode
-          color
-          shortName
-        }
-      }
-    }
-  }
-`;
+// const stopQuery = `
+//   query stops {
+//     stops{
+//       gtfsId
+//       name
+//       code
+//       platformCode
+//       lat
+//       lon
+//       locationType
+//       parentStation {
+//         gtfsId
+//       }
+//       patterns {
+//         headsign
+//         route {
+//           mode
+//           color
+//           shortName
+//         }
+//       }
+//     }
+//   }
+// `;
 
-const stationQuery = `
-  query stations{
-    stations{
-      gtfsId
-      name
-      lat
-      lon
-      locationType
-      stops {
-        gtfsId
-        patterns {
-          route {
-            mode
-            color
-            shortName
-          }
-        }
-      }
-    }
-  }
-`;
+// const stationQuery = `
+//   query stations{
+//     stations{
+//       gtfsId
+//       name
+//       lat
+//       lon
+//       locationType
+//       stops {
+//         gtfsId
+//         patterns {
+//           route {
+//             mode
+//             color
+//             shortName
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
 
 const stopMapper = data => ({
   type: "FeatureCollection",
