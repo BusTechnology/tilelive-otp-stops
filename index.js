@@ -1,4 +1,4 @@
-/*"use strict"
+"use strict"
 const geojsonVt = require('geojson-vt');
 const vtPbf = require('vt-pbf');
 const request = require('requestretry');
@@ -189,4 +189,3 @@ module.exports = GeoJSONSource
 module.exports.registerProtocols = (tilelive) => {
   tilelive.protocols['otpstops:'] = GeoJSONSource
 }
-*/
