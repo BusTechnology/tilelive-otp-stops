@@ -13,7 +13,7 @@ Array.prototype.uniq = function() {
   return _.uniqWith(this, _.isEqual)
 }
 
-const getTileIndex = (url, query, map, callback) => {
+const getTileIndex = (url, query, map1, callback) => {
   request({
     url: url,
     body: query,
@@ -127,8 +127,6 @@ class GeoJSONSource {
   constructor(uri, callback){
     uri.protocol = "http:"
     getTileIndex(uri, stopQuery, stopMapper, (err, stopTileIndex) => {
-      console.log("COLOR IS ");
-      console.log(stops.pattern.route.color);
       if (err){
         callback(err);
         return;
