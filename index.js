@@ -1,4 +1,4 @@
-"use strict"
+/*"use strict"
 const geojsonVt = require('geojson-vt');
 const vtPbf = require('vt-pbf');
 const request = require('requestretry');
@@ -13,7 +13,7 @@ Array.prototype.uniq = function() {
   return _.uniqWith(this, _.isEqual)
 }
 
-const getTileIndex = (url, query, map1, callback) => {
+const getTileIndex = (url, query, map, callback) => {
   request({
     url: url,
     body: query,
@@ -189,3 +189,4 @@ module.exports = GeoJSONSource
 module.exports.registerProtocols = (tilelive) => {
   tilelive.protocols['otpstops:'] = GeoJSONSource
 }
+*/
