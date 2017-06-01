@@ -48,6 +48,14 @@ const stopQuery = `
       lat
       lon
       locationType
+      topDestinationsForToday {
+        route {
+          mode
+          shortName
+          color
+        }
+        headsign
+      }
       parentStation {
         gtfsId
       }
@@ -96,12 +104,12 @@ const stopMapper = data => ({
       code: stop.code,
       platform: stop.platformCode,
       parentStation: stop.parentStation == null ? null : stop.parentStation.gtfsId,
-      type: stop.patterns == null ? null : stop.patterns.map(pattern => pattern.route.mode).uniq().join(","),
-      patterns: stop.patterns == null ? null : JSON.stringify(stop.patterns.map(pattern => ({
-        color: pattern.route.color,
-        headsign: pattern.headsign,
-        type: pattern.route.mode,
-        shortName: pattern.route.shortName,
+      type: stop.topDestinationsForToday == null ? null : stop.topDestinationsForToday.map(destination => destination.route.mode).uniq().join(","),
+      patterns: stop.topDestinationsForToday == null ? null : JSON.stringify(stop.topDestinationsForToday.map(destination => ({
+        color: topDestinationsForToday.route.color,
+        headsign: topDestinationsForToday.headsign,
+        type: topDestinationsForToday.route.mode,
+        shortName: topDestinationsForToday.route.shortName,
       })))
     }
   }))
@@ -115,9 +123,9 @@ const stationMapper = data => ({
     properties: {
       gtfsId: station.gtfsId,
       name: station.name,
-      type: Array.from(new Set(station.stops.flatMap(stop => stop.patterns.flatMap(pattern => pattern.route.mode)))).join(','),
+      type: Array.from(new Set(station.stops.flatMap(stop => stop.topDestinationsForToday.flatMap(destination => destination.route.mode)))).join(','),
       stops: JSON.stringify(station.stops.map(stop => stop.gtfsId)),
-      routes: JSON.stringify(station.stops.flatMap(stop => stop.patterns.flatMap(pattern => pattern.route)).uniq()),
+      routes: JSON.stringify(station.stops.flatMap(stop => stop.topDestinationsForToday.flatMap(destination => destination.route)).uniq()),
     }
   }))
 })
