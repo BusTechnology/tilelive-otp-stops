@@ -14,6 +14,8 @@ Array.prototype.uniq = function() {
 }
 
 const getTileIndex = (url, query, map, callback) => {
+  console.log(url);
+  console.log(query);
   request({
     url: url,
     body: query,
@@ -48,7 +50,7 @@ const stopQuery = `
       lat
       lon
       locationType
-      topDestinationsForToday {
+      topDestinationsForToday(serviceDay: "20170601") {
         route {
           mode
           shortName
@@ -81,6 +83,14 @@ const stationQuery = `
       locationType
       stops {
         gtfsId
+        topDestinationsForToday(serviceDay: "20170601"){
+        route {
+          mode
+          shortName
+          color
+        }
+        headsign
+      }
         patterns {
           route {
             mode
@@ -106,10 +116,10 @@ const stopMapper = data => ({
       parentStation: stop.parentStation == null ? null : stop.parentStation.gtfsId,
       type: stop.topDestinationsForToday == null ? null : stop.topDestinationsForToday.map(destination => destination.route.mode).uniq().join(","),
       patterns: stop.topDestinationsForToday == null ? null : JSON.stringify(stop.topDestinationsForToday.map(destination => ({
-        color: topDestinationsForToday.route.color,
-        headsign: topDestinationsForToday.headsign,
-        type: topDestinationsForToday.route.mode,
-        shortName: topDestinationsForToday.route.shortName,
+        color: destination.route.color,
+        headsign: destination.headsign,
+        type: destination.route.mode,
+        shortName: destination.route.shortName,
       })))
     }
   }))
