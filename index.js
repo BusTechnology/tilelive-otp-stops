@@ -5,6 +5,8 @@ const request = require('requestretry');
 const zlib = require('zlib');
 const _ = require('lodash')
 
+var res = (new Date()).toISOString().slice(0,10).replace(/-/g,"");
+
 Array.prototype.flatMap = function(lambda) {
   return [].concat.apply([],this.map(lambda));
 };
@@ -16,6 +18,7 @@ Array.prototype.uniq = function() {
 const getTileIndex = (url, query, map, callback) => {
   console.log(url);
   console.log(query);
+  
   request({
     url: url,
     body: query,
@@ -50,7 +53,7 @@ const stopQuery = `
       lat
       lon
       locationType
-      topDestinationsForToday(serviceDay: "20170601") {
+      topDestinationsForToday(serviceDay: "${res}") {
         route {
           mode
           shortName
@@ -83,7 +86,7 @@ const stationQuery = `
       locationType
       stops {
         gtfsId
-        topDestinationsForToday(serviceDay: "20170601"){
+        topDestinationsForToday(serviceDay: "${res}"){
         route {
           mode
           shortName
