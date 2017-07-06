@@ -5,7 +5,8 @@ const request = require('requestretry');
 const zlib = require('zlib');
 const _ = require('lodash')
 
-var res = (new Date()).toISOString().slice(0,10).replace(/-/g,"");
+var res = "";
+function updateRes(){ res = (new Date()).toISOString().slice(0,10).replace(/-/g,"") };
 
 Array.prototype.flatMap = function(lambda) {
   return [].concat.apply([],this.map(lambda));
@@ -18,7 +19,7 @@ Array.prototype.uniq = function() {
 const getTileIndex = (url, query, map, callback) => {
   console.log(url);
   console.log(query);
-  
+
   request({
     url: url,
     body: query,
@@ -43,7 +44,7 @@ const getTileIndex = (url, query, map, callback) => {
   })
 }
 
-const stopQuery = `
+function getStopQuery() { return `
   query stops {
     stops{
       gtfsId
@@ -74,9 +75,9 @@ const stopQuery = `
       }
     }
   }
-`;
+`;}
 
-const stationQuery = `
+function getStationQuery() { return `
   query stations{
     stations{
       gtfsId
@@ -104,7 +105,7 @@ const stationQuery = `
       }
     }
   }
-`;
+`;}
 
 const stopMapper = data => ({
   type: "FeatureCollection",
@@ -145,15 +146,17 @@ const stationMapper = data => ({
 
 
 class GeoJSONSource {
-  constructor(uri, callback){
+  connect(uri, callback){
+    updateRes();
+    console.log(`Running update with res ${res}`);
     uri.protocol = "http:"
-    getTileIndex(uri, stopQuery, stopMapper, (err, stopTileIndex) => {
+    getTileIndex(uri, getStopQuery(), stopMapper, (err, stopTileIndex) => {
       if (err){
         callback(err);
         return;
       }
       this.stopTileIndex = stopTileIndex;
-      getTileIndex(uri, stationQuery, stationMapper, (err, stationTileIndex) => {
+      getTileIndex(uri, getStationQuery(), stationMapper, (err, stationTileIndex) => {
         if (err){
           callback(err);
           return;
@@ -165,6 +168,11 @@ class GeoJSONSource {
     })
   };
 
+  constructor(uri, callback){
+    this.connect(uri, callback);
+    //roughly every hour, execute this function so we can update the stops...
+    setTimeout(this.connect,3600000,uri,callback);
+  };
 
   getTile(z, x, y, callback){
     let stopTile = this.stopTileIndex.getTile(z, x, y)
